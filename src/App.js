@@ -6,15 +6,10 @@ import { OPEN_WEATHER_API_URL, openWeatherApiKey } from "./api";
 import WeatherForecast from "./components/WeatherForecast";
 
 function App() {
-  const [cityData, setCityData] = useState({});
-  const [weather, setWeather] = useState();
-  const [weatherIcon, setWeatherIcon] = useState();
-  const [temperature, setTemperature] = useState();
-  const [feelLike, setFeelsLike] = useState();
-  const [wind, setWind] = useState();
-  const [humidity, setHumidity] = useState();
-  const [pressure, setPressure] = useState();
+  const [currentWeather, setCurrentWeather] = useState();
+  const [forecastWeather, setForecastWeather] = useState();
   const [cityLabel, setCityLabel] = useState();
+  const [cityData, setCityData] = useState({});
 
   useEffect(() => {
     fetch(
@@ -22,18 +17,9 @@ function App() {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         // Here we are taking care of the first time the fetch happens when we still have not yet set the lat and lon
         if (data.cod !== "400") {
-          setWeather(data.weather[0].description);
-          setWeatherIcon(data.weather[0].icon);
-          // We convert the temperature to Celcius before setting the state
-          // We also round to one decimal place hence the multiply by 10 and divide by 10
-          setTemperature(Math.round((data.main.temp - 273.15) * 10) / 10);
-          setFeelsLike(Math.round((data.main.feels_like - 273.15) * 100) / 100);
-          setWind(data.wind.speed);
-          setHumidity(data.main.humidity);
-          setPressure(data.main.pressure);
+          setCurrentWeather(data);
           // We will set the city name after loading everything to avoid confusing users
           setCityLabel(cityData.label);
         }
@@ -53,17 +39,8 @@ function App() {
       <Header />
       <Search handleSearch={handleSearch} />
       {/* We only show the current weather component after we have loaded all its data */}
-      {temperature && (
-        <CurrentWeather
-          weather={weather}
-          feelLike={feelLike}
-          humidity={humidity}
-          pressure={pressure}
-          wind={wind}
-          weatherIcon={weatherIcon}
-          temperature={temperature}
-          cityLabel={cityLabel}
-        />
+      {currentWeather && (
+        <CurrentWeather data={currentWeather} cityLabel={cityLabel} />
       )}
       <WeatherForecast />
     </div>

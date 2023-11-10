@@ -1,16 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { AsyncPaginate } from "react-select-async-paginate";
-import {
-  geoApiOptions,
-  GEO_API_URL,
-  API_NINJAS_URL,
-  apiNinjasOptions,
-} from "../api";
+import { API_NINJAS_URL, apiNinjasOptions } from "../api";
 
 function Search({ handleSearch }) {
   const handleChange = (cityName) => {
     handleSearch(cityName);
-    console.log(cityName);
   };
 
   const loadOptions = (cityNamePrefix) => {
