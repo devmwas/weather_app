@@ -3,7 +3,7 @@ import React from "react";
 function CurrentWeather({ data, cityLabel }) {
   return (
     <div
-      className="mx-4 mt-4 mx-auto"
+      className="mx-4 mt-4 sm:mx-auto"
       style={{
         border: "1px solid gray",
         maxWidth: "350px",
@@ -50,7 +50,7 @@ function CurrentWeather({ data, cityLabel }) {
           ></div>
           <div className="flex justify-between space-x-4">
             <div>Humidity</div>
-            <div className="font-semibold">{data.wind.humidity} %</div>
+            <div className="font-semibold">{data.main.humidity} %</div>
           </div>
           {/* Horizontal Rule for decoration purposes */}
           <div
@@ -58,7 +58,7 @@ function CurrentWeather({ data, cityLabel }) {
           ></div>
           <div className="flex justify-between space-x-4">
             <div>Pressure</div>
-            <div className="font-semibold">{data.wind.pressure} N/m3</div>
+            <div className="font-semibold">{data.main.pressure} hPa</div>
           </div>
         </div>
       </div>

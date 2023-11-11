@@ -24,3 +24,7 @@ export const openWeatherApiOptions = {
   method: "GET",
 };
 export const openWeatherApiKey = "0218ec705a1de1a55512fd9ac15b124f";
+
+// FORECAST URL
+export const OPEN_WEATHER_API_FORECAST_URL =
+  "https://api.openweathermap.org/data/2.5/forecast";

@@ -10,7 +10,7 @@ function Search({ handleSearch }) {
   const loadOptions = (cityNamePrefix) => {
     // This functions returns an object with the options key which is an array of items for the select tag
     return fetch(
-      `${API_NINJAS_URL}?name=${cityNamePrefix}&limit=10`,
+      `${API_NINJAS_URL}?name=${cityNamePrefix || "a"}&limit=20`,
       apiNinjasOptions
     )
       .then((response) => response.json())
@@ -32,7 +32,7 @@ function Search({ handleSearch }) {
         placeholder="Enter City"
         // value={cityName}
         onChange={handleChange}
-        debounceTimeout={300}
+        debounceTimeout={100}
         loadOptions={loadOptions}
       />
     </div>

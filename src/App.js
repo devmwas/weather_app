@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Search from "./components/Search";
 import CurrentWeather from "./components/CurrentWeather";
-import { OPEN_WEATHER_API_URL, openWeatherApiKey } from "./api";
+import {
+  OPEN_WEATHER_API_URL,
+  openWeatherApiKey,
+  OPEN_WEATHER_API_FORECAST_URL,
+} from "./api";
 import WeatherForecast from "./components/WeatherForecast";
 
 function App() {
@@ -11,19 +15,27 @@ function App() {
   const [cityLabel, setCityLabel] = useState();
   const [cityData, setCityData] = useState({});
 
+  const weatherFetch = fetch(
+    `${OPEN_WEATHER_API_URL}?lat=${cityData.lat}&lon=${cityData.lon}&appId=${openWeatherApiKey}`
+  );
+  const forecastFetch = fetch(
+    `${OPEN_WEATHER_API_FORECAST_URL}?lat=${cityData.lat}&lon=${cityData.lon}&appId=${openWeatherApiKey}`
+  );
+
   useEffect(() => {
-    fetch(
-      `${OPEN_WEATHER_API_URL}?lat=${cityData.lat}&lon=${cityData.lon}&appId=${openWeatherApiKey}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        // Here we are taking care of the first time the fetch happens when we still have not yet set the lat and lon
-        if (data.cod !== "400") {
-          setCurrentWeather(data);
-          // We will set the city name after loading everything to avoid confusing users
-          setCityLabel(cityData.label);
-        }
-      });
+    Promise.all([weatherFetch, forecastFetch]).then(async (response) => {
+      // We check to make sure that we have received the expected results
+      if (response[0].ok === true) {
+        const currentWeatherData = await response[0].json();
+        const forecastWeatherData = await response[1].json();
+        setCurrentWeather(currentWeatherData);
+        setForecastWeather(forecastWeatherData);
+        console.log(currentWeatherData);
+        console.log(forecastWeatherData);
+        // We will set the city name after loading everything to avoid confusing users
+        setCityLabel(cityData.label);
+      }
+    });
   }, [cityData.label, cityData.lat, cityData.lon]);
 
   const handleSearch = (cityDetails) => {
@@ -42,7 +54,7 @@ function App() {
       {currentWeather && (
         <CurrentWeather data={currentWeather} cityLabel={cityLabel} />
       )}
-      <WeatherForecast />
+      {forecastWeather && <WeatherForecast data={forecastWeather} />}
     </div>
   );
 }
