@@ -38,12 +38,10 @@ function WeatherForecast({ data }) {
             <AccordionItem key={index}>
               <AccordionItemHeading>
                 <AccordionItemButton>
-                  <div
-                    className="flex justify-between mt-2 cursor-pointer shadow-2xl bg-sky-100 px-2"
-                    // style={{ border: "1px solid black" }}
-                  >
-                    <div className="flex">
+                  <div className="flex justify-between mt-2 cursor-pointer shadow-2xl bg-sky-100 px-2">
+                    <div className="flex space-x-2">
                       <img
+                        className=""
                         width={"50px"}
                         alt="Weather Icon"
                         src={`icons/${data.list[indexOffset].weather[0].icon}.png`}
@@ -55,11 +53,11 @@ function WeatherForecast({ data }) {
                         </div>
                       </div>
                     </div>
-                    <div className="flex space-x-2">
+                    <div className="flex justify-end flex-col sm:flex-row space-x-2">
                       <div className="my-auto font-semibold">
                         {data.list[indexOffset].weather[0].description}
                       </div>
-                      <div className="my-auto text-xs">
+                      <div className="my-auto text-xs flex justify-end">
                         {/* We convert the temperature from Kelvin to Celcius  */}
                         {/* We also remove any decimals if available  */}
                         {Math.round(
