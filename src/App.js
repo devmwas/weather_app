@@ -30,8 +30,6 @@ function App() {
         const forecastWeatherData = await response[1].json();
         setCurrentWeather(currentWeatherData);
         setForecastWeather(forecastWeatherData);
-        console.log(currentWeatherData);
-        console.log(forecastWeatherData);
         // We will set the city name after loading everything to avoid confusing users
         setCityLabel(cityData.label);
       }
