@@ -9,31 +9,33 @@ import {
 
 function WeatherForecast({ data }) {
   const daysOfWeek = [
+    "Sunday",
     "Monday",
     "Tuesday",
     "Wednesday",
     "Thursday",
     "Friday",
     "Saturday",
-    "Sunday",
   ];
-  const dayOfWeek = new Date().getDay();
-  const foreCastDays = daysOfWeek
-    .slice(dayOfWeek - 1, daysOfWeek.length)
-    .concat(daysOfWeek.slice(0, dayOfWeek - 1));
 
-  /* Forecast data is in 3-hour splits so we divide by 8 to get daily forecasts */
-  const numberOfForecastDays = data.list.length / 8;
-  const accordionPanelItems = [1, 2, 3, 4, 5, 6, 7, 8];
+  // This object will contain forecast data separated into the different days it falls in
+  const forecastGroups = {};
+
+  for (let i = 0; i < data.list.length; i++) {
+    // If a day isnt stored in forecastGroups, we add it. Else, we append the item to it
+    if (forecastGroups[`${data.list[i].dt_txt.split(" ")[0]}`]) {
+      forecastGroups[`${data.list[i].dt_txt.split(" ")[0]}`].push(data.list[i]);
+    } else {
+      forecastGroups[`${data.list[i].dt_txt.split(" ")[0]}`] = [data.list[i]];
+    }
+  }
 
   return (
     <div className="mx-4 my-4">
-      <div className="text-2xl">Five Days Forecast</div>
+      <div className="text-2xl">Weather Forecast</div>
       <Accordion allowZeroExpanded={true}>
-        {/* We only have results for five days so we'll only loop through five days of the week */}
-        {foreCastDays.slice(0, 5).map((forecastDay, index) => {
-          // We want to pick the first daily prediction for each day to put in accordion heading
-          let indexOffset = index * 8;
+        {/* The forecast days are the keys of this object so we'll loop through them */}
+        {Object.keys(forecastGroups).map((forecastDate, index) => {
           return (
             <AccordionItem key={index}>
               <AccordionItemHeading>
@@ -41,31 +43,29 @@ function WeatherForecast({ data }) {
                   <div className="flex justify-between mt-2 cursor-pointer shadow-2xl bg-sky-100 px-2">
                     <div className="flex space-x-2">
                       <img
-                        className=""
                         width={"50px"}
                         alt="Weather Icon"
-                        src={`icons/${data.list[indexOffset].weather[0].icon}.png`}
+                        src={`icons/${forecastGroups[forecastDate][0].weather[0].icon}.png`}
                       />
                       <div className="my-auto">
-                        <div>{forecastDay}</div>
-                        <div className="text-xs">
-                          {data.list[indexOffset + index].dt_txt.split(" ")[0]}
-                        </div>
+                        {/* We get the day of the week dynamically using the Date object */}
+                        <div>{daysOfWeek[new Date(forecastDate).getDay()]}</div>
+                        <div className="text-xs">{forecastDate}</div>
                       </div>
                     </div>
                     <div className="flex justify-end flex-col sm:flex-row space-x-2">
                       <div className="my-auto font-semibold">
-                        {data.list[indexOffset].weather[0].description}
+                        {forecastGroups[forecastDate][0].weather[0].description}
                       </div>
                       <div className="my-auto text-xs flex justify-end">
                         {/* We convert the temperature from Kelvin to Celcius  */}
                         {/* We also remove any decimals if available  */}
                         {Math.round(
-                          data.list[indexOffset].main.temp_max - 273.15
+                          forecastGroups[forecastDate][0].main.temp_max - 273.15
                         )}{" "}
                         °C /
                         {Math.round(
-                          data.list[indexOffset].main.temp_min - 273.15
+                          forecastGroups[forecastDate][0].main.temp_min - 273.15
                         )}{" "}
                         °C
                       </div>
@@ -74,16 +74,14 @@ function WeatherForecast({ data }) {
                 </AccordionItemButton>
               </AccordionItemHeading>
               <AccordionItemPanel>
-                {accordionPanelItems.map((item, index) => {
+                {forecastGroups[forecastDate].map((forecastData, index) => {
                   return (
                     <div className="flex justify-between px-2" key={index}>
                       <div className="text-xs">
                         <div className="font-semibold">
-                          {data.list[indexOffset + index].dt_txt.split(" ")[1]}
+                          {forecastData.dt_txt.split(" ")[1]}
                         </div>
-                        <div>
-                          {data.list[indexOffset + index].dt_txt.split(" ")[0]}
-                        </div>
+                        <div>{forecastData.dt_txt.split(" ")[0]}</div>
                       </div>
                       <div className="mx-2 w-2/3">
                         <div
@@ -92,50 +90,38 @@ function WeatherForecast({ data }) {
                         >
                           <div>Temperature</div>
                           <div className="font-semibold">
-                            {Math.round(
-                              data.list[indexOffset + index].main.temp - 273.15
-                            )}{" "}
-                            °C
+                            {Math.round(forecastData.main.temp - 273.15)} °C
                           </div>
                         </div>
                         <div className="flex justify-between text-xs">
                           <div>Feels Like</div>
                           <div className="font-semibold">
-                            {Math.round(
-                              data.list[indexOffset + index].main.feels_like -
-                                273.15
-                            )}{" "}
+                            {Math.round(forecastData.main.feels_like - 273.15)}{" "}
                             °C
                           </div>
                         </div>
                         <div className="flex justify-between text-xs">
                           <div>Description</div>
                           <div className="font-semibold">
-                            {
-                              data.list[indexOffset + index].weather[0]
-                                .description
-                            }
+                            {forecastData.weather[0].description}
                           </div>
                         </div>
                         <div className="flex justify-between text-xs">
                           <div>Wind</div>
                           <div className="font-semibold">
-                            {Math.round(
-                              data.list[indexOffset + index].wind.speed
-                            )}{" "}
-                            m/s
+                            {Math.round(forecastData.wind.speed)} m/s
                           </div>
                         </div>
                         <div className="flex justify-between text-xs">
                           <div>Humidity</div>
                           <div className="font-semibold">
-                            {data.list[indexOffset + index].main.humidity} %
+                            {forecastData.main.humidity} %
                           </div>
                         </div>
                         <div className="flex justify-between text-xs">
                           <div>Pressure</div>
                           <div className="font-semibold">
-                            {data.list[indexOffset + index].main.pressure} hPa
+                            {forecastData.main.pressure} hPa
                           </div>
                         </div>
                         <div

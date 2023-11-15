@@ -20,7 +20,7 @@ function CurrentWeather({ data, cityLabel }) {
       </div>
       <div className="flex justify-between px-4 bg-green-100">
         <div className="flex flex-col justify-center">
-          <div className="text-4xl font-bold">
+          <div className="text-3xl font-bold">
             {/* We convert the temperature from Kelvin to Celcius  */}
             {/* We also round to one decimal place by multiplying by 10 and then dividing by 10  */}
             {Math.round((data.main.temp - 273.15) * 10) / 10} °C
