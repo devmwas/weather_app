@@ -8,6 +8,7 @@ import {
   OPEN_WEATHER_API_FORECAST_URL,
 } from "./api";
 import WeatherForecast from "./components/WeatherForecast";
+import Footer from "./components/Footer";
 
 function App() {
   const [currentWeather, setCurrentWeather] = useState();
@@ -52,7 +53,12 @@ function App() {
       {currentWeather && (
         <CurrentWeather data={currentWeather} cityLabel={cityLabel} />
       )}
-      {forecastWeather && <WeatherForecast data={forecastWeather} />}
+      {forecastWeather && (
+        <>
+          <WeatherForecast data={forecastWeather} />
+          <Footer />
+        </>
+      )}
     </div>
   );
 }

@@ -40,7 +40,7 @@ function WeatherForecast({ data }) {
             <AccordionItem key={index}>
               <AccordionItemHeading>
                 <AccordionItemButton>
-                  <div className="flex justify-between mt-2 cursor-pointer shadow-2xl bg-sky-100 px-2">
+                  <div className="flex justify-between mt-2 cursor-pointer shadow-md bg-sky-100 px-2">
                     <div className="flex space-x-2">
                       <img
                         width={"50px"}
