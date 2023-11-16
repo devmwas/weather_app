@@ -18,7 +18,7 @@ function CurrentWeather({ data, cityLabel }) {
           <img alt="Weather Icon" src={`icons/${data.weather[0].icon}.png`} />
         </div>
       </div>
-      <div className="flex justify-between px-4 bg-green-100">
+      <div className="flex justify-between px-4 bg-sky-100">
         <div className="flex flex-col justify-center">
           <div className="text-3xl font-bold">
             {/* We convert the temperature from Kelvin to Celcius  */}
