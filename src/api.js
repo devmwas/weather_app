@@ -13,7 +13,7 @@ export const API_NINJAS_URL = "https://api.api-ninjas.com/v1/city";
 export const apiNinjasOptions = {
   method: "GET",
   headers: {
-    "X-Api-Key": "MsWb09A/9iw7qRaHBKtcmA==lCugw8QfwR8W0qr0",
+    "X-Api-Key": "KZ3Jll6AGGL4PusE2JLpwg==ds083XBILYfnInhO",
   },
 };
 
