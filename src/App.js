@@ -4,8 +4,8 @@ import Search from "./components/Search";
 import CurrentWeather from "./components/CurrentWeather";
 import {
   OPEN_WEATHER_API_URL,
-  openWeatherApiKey,
   OPEN_WEATHER_API_FORECAST_URL,
+  openWeatherApiOptions,
 } from "./api";
 import WeatherForecast from "./components/WeatherForecast";
 import Footer from "./components/Footer";
@@ -17,10 +17,12 @@ function App() {
   const [cityData, setCityData] = useState({});
 
   const weatherFetch = fetch(
-    `${OPEN_WEATHER_API_URL}?lat=${cityData.lat}&lon=${cityData.lon}&appId=${openWeatherApiKey}`
+    `${OPEN_WEATHER_API_URL}?lat=${cityData.lat}&lon=${cityData.lon}&appId=${process.env.REACT_APP_openWeatherApiKey}`,
+    openWeatherApiOptions
   );
   const forecastFetch = fetch(
-    `${OPEN_WEATHER_API_FORECAST_URL}?lat=${cityData.lat}&lon=${cityData.lon}&appId=${openWeatherApiKey}`
+    `${OPEN_WEATHER_API_FORECAST_URL}?lat=${cityData.lat}&lon=${cityData.lon}&appId=${process.env.REACT_APP_openWeatherApiKey}`,
+    openWeatherApiOptions
   );
 
   useEffect(() => {
