@@ -1,6 +1,6 @@
 import React from "react";
 import { AsyncPaginate } from "react-select-async-paginate";
-import { API_NINJAS_URL, apiNinjasOptions } from "../api";
+import { apiNinjasOptions, API_NINJAS_URL } from "../api";
 
 function Search({ handleSearch }) {
   const handleChange = (cityName) => {
@@ -30,7 +30,6 @@ function Search({ handleSearch }) {
     <div className="mt-4 mx-4">
       <AsyncPaginate
         placeholder="Enter City"
-        // value={cityName}
         onChange={handleChange}
         debounceTimeout={100}
         loadOptions={loadOptions}
