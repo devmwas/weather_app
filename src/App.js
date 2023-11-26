@@ -27,20 +27,23 @@ function App() {
   );
 
   useEffect(() => {
-    // This will controll the skeletons
-    setLoading(true);
-    Promise.all([weatherFetch, forecastFetch]).then(async (response) => {
-      // We check to make sure that we have received the expected results
-      if (response[0].ok === true) {
-        const currentWeatherData = await response[0].json();
-        const forecastWeatherData = await response[1].json();
-        setCurrentWeather(currentWeatherData);
-        setForecastWeather(forecastWeatherData);
-        // We will set the city name after loading everything to avoid confusing users
-        setCityLabel(cityData.label);
-        setLoading(false);
-      } else setLoading(false);
-    });
+    // We only want to show the skeletons if we have searched for a city
+    if (cityData.label) {
+      // This will controll the skeletons
+      setLoading(true);
+      Promise.all([weatherFetch, forecastFetch]).then(async (response) => {
+        // We check to make sure that we have received the expected results
+        if (response[0].ok === true) {
+          const currentWeatherData = await response[0].json();
+          const forecastWeatherData = await response[1].json();
+          setCurrentWeather(currentWeatherData);
+          setForecastWeather(forecastWeatherData);
+          // We will set the city name after loading everything to avoid confusing users
+          setCityLabel(cityData.label);
+          setLoading(false);
+        } else setLoading(false);
+      });
+    }
 
     return () => {
       setCurrentWeather(null);
