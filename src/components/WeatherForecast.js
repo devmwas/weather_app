@@ -1,3 +1,4 @@
+import { Skeleton } from "@mui/material";
 import React from "react";
 import {
   Accordion,
@@ -7,7 +8,7 @@ import {
   AccordionItemPanel,
 } from "react-accessible-accordion";
 
-function WeatherForecast({ data }) {
+function WeatherForecast({ data, loading }) {
   const daysOfWeek = [
     "Sunday",
     "Monday",
@@ -21,7 +22,7 @@ function WeatherForecast({ data }) {
   // This object will contain forecast data separated into the different days it falls in
   const forecastGroups = {};
 
-  for (let i = 0; i < data.list.length; i++) {
+  for (let i = 0; i < data?.list.length; i++) {
     // If a day isnt stored in forecastGroups, we add it. Else, we append the item to it
     if (forecastGroups[`${data.list[i].dt_txt.split(" ")[0]}`]) {
       forecastGroups[`${data.list[i].dt_txt.split(" ")[0]}`].push(data.list[i]);
@@ -29,6 +30,21 @@ function WeatherForecast({ data }) {
       forecastGroups[`${data.list[i].dt_txt.split(" ")[0]}`] = [data.list[i]];
     }
   }
+  // We dont want do display anything on the first mount
+  if (!loading && !data) return null;
+
+  // We return s skeleton to reduce load time frustration
+  if (loading)
+    return (
+      <div className="mx-4 my-4">
+        <div className="text-2xl">Weather Forecast</div>
+        <Skeleton height={100} sx={{ width: "100%", marginTop: 0 }} />
+        <Skeleton height={100} sx={{ width: "100%", marginTop: 0 }} />
+        <Skeleton height={100} sx={{ width: "100%", marginTop: 0 }} />
+        <Skeleton height={100} sx={{ width: "100%", marginTop: 0 }} />
+        <Skeleton height={100} sx={{ width: "100%", marginTop: 0 }} />
+      </div>
+    );
 
   return (
     <div className="mx-4 my-4">

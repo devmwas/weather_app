@@ -15,6 +15,7 @@ function App() {
   const [forecastWeather, setForecastWeather] = useState();
   const [cityLabel, setCityLabel] = useState();
   const [cityData, setCityData] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const weatherFetch = fetch(
     `${OPEN_WEATHER_API_URL}?lat=${cityData.lat}&lon=${cityData.lon}&appId=${process.env.REACT_APP_openWeatherApiKey}`,
@@ -26,6 +27,8 @@ function App() {
   );
 
   useEffect(() => {
+    // This will controll the skeletons
+    setLoading(true);
     Promise.all([weatherFetch, forecastFetch]).then(async (response) => {
       // We check to make sure that we have received the expected results
       if (response[0].ok === true) {
@@ -35,8 +38,14 @@ function App() {
         setForecastWeather(forecastWeatherData);
         // We will set the city name after loading everything to avoid confusing users
         setCityLabel(cityData.label);
-      }
+        setLoading(false);
+      } else setLoading(false);
     });
+
+    return () => {
+      setCurrentWeather(null);
+      setForecastWeather(null);
+    };
   }, [cityData.label, cityData.lat, cityData.lon]);
 
   const handleSearch = (cityDetails) => {
@@ -51,14 +60,33 @@ function App() {
     <div className="App md:w-1/2 mx-auto">
       <Header />
       <Search handleSearch={handleSearch} />
-      {/* We only show the current weather component after we have loaded all its data */}
-      {currentWeather && (
-        <CurrentWeather data={currentWeather} cityLabel={cityLabel} />
+      {/* We want to display skeletons if data is still loading */}
+      {loading && (
+        <CurrentWeather
+          data={currentWeather}
+          cityLabel={cityLabel}
+          loading={loading}
+        />
       )}
-      {forecastWeather && (
+      {!loading && (
+        <CurrentWeather
+          data={currentWeather}
+          cityLabel={cityLabel}
+          loading={loading}
+        />
+      )}
+      {/* We want to display skeletons if data is still loading */}
+
+      {loading && (
         <>
-          <WeatherForecast data={forecastWeather} />
-          <Footer />
+          <WeatherForecast data={forecastWeather} loading={loading} />
+          <Footer loading={loading} data={forecastWeather} />
+        </>
+      )}
+      {!loading && (
+        <>
+          <WeatherForecast data={forecastWeather} loading={loading} />
+          <Footer loading={loading} data={forecastWeather} />
         </>
       )}
     </div>
