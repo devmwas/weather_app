@@ -10,7 +10,7 @@ function Search({ handleSearch }) {
   const loadOptions = (cityNamePrefix) => {
     // This functions returns an object with the options key which is an array of items for the select tag
     return fetch(
-      `${API_NINJAS_URL}?name=${cityNamePrefix || "a"}&limit=20`,
+      `${API_NINJAS_URL}?name=${cityNamePrefix || "a"}`,
       apiNinjasOptions
     )
       .then((response) => response.json())
